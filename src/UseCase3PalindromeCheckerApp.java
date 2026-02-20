@@ -1,8 +1,8 @@
-
-public class UseCase2PalindromeCheckerApp {
+import java.util.Scanner;
+public class UseCase3PalindromeCheckerApp {
     public static void main(String[] args){
-
-        String s = "madam";
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
         boolean pal;
         s = s.toLowerCase();
 
@@ -18,4 +18,5 @@ public class UseCase2PalindromeCheckerApp {
         System.out.println("Is it a Palindrome? : "+pal);
     }
 }
+
 
