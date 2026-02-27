@@ -1,0 +1,103 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+/**
+ * Use Case 12: Strategy Pattern for Palindrome Algorithms
+ *
+ * This class demonstrates how different palindrome
+ * validation algorithms can be selected dynamically
+ * at runtime using the Strategy Design Pattern.
+ *
+ * At this stage, the application:
+ * - Defines a common PalindromeStrategy interface
+ * - Implements a concrete Stack-based strategy
+ * - Injects the strategy at runtime
+ * - Executes the selected algorithm
+ *
+ * No performance comparison is done in this use case.
+ * The focus is purely on algorithm interchangeability.
+ *
+ * @author Developer
+ * @version 12.8
+ */
+
+public class UseCase12PalindromeCheckerApp {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Palindrome Checker - Strategy Pattern");
+        System.out.print("Enter text: ");
+        String input = sc.nextLine();
+
+        // Inject Stack Strategy at runtime
+        PalindromeStrategy strategy = new StackStrategy();
+
+        PalindromeContext context = new PalindromeContext(strategy);
+
+        boolean result = context.execute(input);
+
+        System.out.println("Is it a Palindrome? : " + result);
+
+        sc.close();
+    }
+}
+
+/**
+ * Strategy Interface
+ * Defines contract for all palindrome algorithms.
+ */
+interface PalindromeStrategy {
+    boolean check(String input);
+}
+
+/**
+ * Concrete Strategy - Stack Based Implementation
+ */
+class StackStrategy implements PalindromeStrategy {
+
+    @Override
+    public boolean check(String input) {
+
+        if (input == null) {
+            return false;
+        }
+
+        // Normalize string (ignore case and spaces)
+        String normalized = input.toLowerCase().replaceAll("\\s+", "");
+
+        Stack<Character> stack = new Stack<>();
+
+        // Push characters into stack
+        for (char ch : normalized.toCharArray()) {
+            stack.push(ch);
+        }
+
+        // Compare original with reversed (stack pop)
+        for (char ch : normalized.toCharArray()) {
+            if (ch != stack.pop()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+/**
+ * Context Class
+ * Allows runtime strategy injection.
+ */
+class PalindromeContext {
+
+    private PalindromeStrategy strategy;
+
+    public PalindromeContext(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean execute(String input) {
+        return strategy.check(input);
+    }
+}
